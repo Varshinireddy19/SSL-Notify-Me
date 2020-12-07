@@ -29,6 +29,7 @@ dependencies:
   cloud_firestore:
 
   firebase_messaging: ^6.0.9
+  dartdoc: ^0.37.0
 
 
   # The following adds the Cupertino Icons font to your application.

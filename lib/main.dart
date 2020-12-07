@@ -180,80 +180,111 @@
 //     },
 //   );
 // }
+//reference : medium.com
+//
+// import 'package:flutter/material.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'push_notifications.dart';
+//
+// void main() => runApp(MyApp());
+//
+// class MyApp extends StatefulWidget {
+//   @override
+//   State<StatefulWidget> createState() {
+//     return _MyAppState();
+//   }
+// }
+//
+// class _MyAppState extends State<MyApp> {
+//   String _title = '';
+//   String _message = '';
+//
+//   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+//
+//   _register() {
+//     _firebaseMessaging.getToken().then((token) => print(token));
+//
+//   }
+//
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     getMessage();
+//     // final obj = new PushNotificationsManager();
+//     // obj.init();
+//   }
+//
+//   void getMessage() {
+//     print('hi');
+//     _firebaseMessaging.configure(
+//         onMessage: (Map<String, dynamic> message) async {
+//           print('on message $message');
+//           setState(() => _message = message["notification"]["body"]);
+//           setState(() => _title = message["notification"]["title"]);
+//         }, onResume: (Map<String, dynamic> message) async {
+//       print('on resume $message');
+//       setState(() => _message = message["notification"]["body"]);
+//       setState(() => _title = message["notification"]["title"]);
+//     }, onLaunch: (Map<String, dynamic> message) async {
+//       print('on launch $message');
+//       setState(() => _message = message["notification"]["body"]);
+//       setState(() => _title = message["notification"]["title"]);
+//     });
+//
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//           child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: <Widget>[
+//                 Text("Message: "),
+//                 Text("$_title"),
+//                 Text("$_message"),
+//                 OutlineButton(
+//                   child: Text("Register My Device"),
+//                   onPressed: () {
+//                     _register();
+//                   },
+//                 ),
+//                 // Text("Message: $message")
+//               ]),
+//         ),
+//       ),
+//     );
+//   }
+// }
+import 'package:dartdoc/dartdoc.dart';
 
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'push_nofitications.dart';
+import 'auth.dart';
+import 'auth_provider.dart';
+import 'root_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _MyAppState();
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  //rest of the code
+  runApp(MyApp());
 }
 
-class _MyAppState extends State<MyApp> {
-  String _title = '';
-  String _message = '';
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  _register() {
-    _firebaseMessaging.getToken().then((token) => print(token));
-
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getMessage();
-    final obj = new PushNotificationsManager();
-    obj.init();
-  }
-
-  void getMessage() {
-    print('hi');
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print('on message $message');
-          setState(() => _message = message["notification"]["body"]);
-          setState(() => _title = message["notification"]["title"]);
-        }, onResume: (Map<String, dynamic> message) async {
-      print('on resume $message');
-      setState(() => _message = message["notification"]["body"]);
-      setState(() => _title = message["notification"]["title"]);
-    }, onLaunch: (Map<String, dynamic> message) async {
-      print('on launch $message');
-      setState(() => _message = message["notification"]["body"]);
-      setState(() => _title = message["notification"]["title"]);
-    });
-
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text("Message: "),
-                Text("$_title"),
-                Text("$_message"),
-                OutlineButton(
-                  child: Text("Register My Device"),
-                  onPressed: () {
-                    _register();
-                  },
-                ),
-                // Text("Message: $message")
-              ]),
+    return AuthProvider(
+      auth: Auth(),
+      child: MaterialApp(
+        title: 'Notify me',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
         ),
+        home: RootPage(),
       ),
     );
   }
